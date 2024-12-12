@@ -29,8 +29,8 @@ export const promiseComponent = (element)=>{
     //findHero(id1).then( argumento => renderHero(argumento));
     //--OPCION B //Por defecto se manda el primer argumento que existe 
 
-    let hero1,hero2;
-
+//// METODO 1 PARA HACERLO ////
+/*    let hero1,hero2;
     findHero(id1)
         .then( (hero1)=>{
             findHero(id2)
@@ -41,8 +41,32 @@ export const promiseComponent = (element)=>{
         } )
         .catch( renderError )
                 
-    
+  */
 
+//// METODO 2 PARA HACERLO ////        
+//se hace como una cadena de promesas 
+/*let hero1;
+findHero(id1)
+        .then(hero =>{
+            hero1 = hero
+            //hacemos esto ya que la promesa nos retorna otra promesa. y podemos hacer que se ejecute la busqueda
+            return findHero(id2)            
+        }).then(hero2 =>{
+            renderTwoHeroes(hero1,hero2);
+        })
+        .catch(renderError);
+*/
+
+
+/////////// HACIENDO USO DE PROMISE.ALL ///////////
+//ojo, solo sirve para ejecutar promesas independientes
+//si necesitamos algo consecutivo es mejor trabajarlo con los otros metodos
+Promise.all([
+    findHero(id1),
+    findHero(id2)
+])
+    .then( ([hero1,hero2]) => renderTwoHeroes(hero1,hero2))
+    .catch(renderError)        
 }
 
 /**
